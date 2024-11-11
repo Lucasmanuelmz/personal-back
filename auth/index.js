@@ -41,7 +41,7 @@ auth.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'Senha incorreta' });
     }
 
-    const payload = { sub: user.id };
+    const payload = { sub: user.id, role: user.role };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '4h',
       issuer: options.issuer,

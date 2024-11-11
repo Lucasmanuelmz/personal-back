@@ -22,9 +22,13 @@ const User = sequelize.define(
  password: {
   type: DataTypes.STRING,
   allowNull: false
+ },
+ role: {
+  type: DataTypes.ENUM('user', 'author', 'admin'),
+  defaultValue: 'user',
+  allowNull: false
  }
 }
 )
 
-User.sync()
 module.exports = User;

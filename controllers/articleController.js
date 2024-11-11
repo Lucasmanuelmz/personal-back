@@ -2,6 +2,9 @@ const Article = require('../models/postModel');
 const Category = require('../models/categoryModel');
 require('dotenv').config();
 const slugify = require('slugify');
+const articleValidate = require('../validator/articleValidate');
+const { validationResult } = require('express-validator');
+const validateUpdateArticle = require('../validator/validateUpdateArticle');
 const baseUrl = process.env.BASE_URL;
 
 exports.getArticles = (req, res) => {
@@ -59,11 +62,17 @@ exports.getArticleBySlug = (req, res) => {
   });
 };
 
-
-exports.createArticle = (req, res) => {
+exports.createArticle = [articleValidate, (req, res) => {
 
   const {title, description, article, categoryId} = req.body;
   const url = req.file? `${baseUrl}/uploads/${req.file.filename}`: null;
+
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()) {
+    return res.status(400).json({errors: errors.array()})
+  }
+
   Article.create({
     title: title,
     slug: slugify(title),
@@ -78,10 +87,16 @@ exports.createArticle = (req, res) => {
  .catch(error => {
   res.status(400).json({error: 'Não foi possível criar o artigo', detail: error.message})
  })
-}
+}];
 
-exports.updateArticle = (req, res) => {
+exports.updateArticle =[validateUpdateArticle, (req, res) => {
   const {title, description, article, id} = req.body;
+
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()) {
+    return res.status(400).json({errors: errors.array()})
+  }
   Article.update({
     title,
     description,
@@ -95,7 +110,7 @@ exports.updateArticle = (req, res) => {
   .catch(error => {
     res.status(400).json({error: 'Tivemos problemas ao atualizar o artigo', detail: error.message})
   })
-}
+}];
 
 exports.deleteArticle = (req, res) => {
   const { id } = req.params;

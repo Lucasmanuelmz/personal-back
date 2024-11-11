@@ -34,8 +34,6 @@ exports.getCategoryBySlug = (req, res) => {
     });
 };
 
-
-
 exports.createCategory = (req, res) => {
   const {name} = req.body;
   Category.create({

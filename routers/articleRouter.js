@@ -1,27 +1,42 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const articleRouter = Router();
 const articleController = require('../controllers/articleController');
 const upload = require('../config/multer');
-const handleMulterErrors = require('../middlewares/errors')
+const handleMulterErrors = require('../middlewares/errors');
+const protectRouter = require('../middlewares/protectRoutes');
+const isAuthor = require('../middlewares/author');
+const isAdmin = require('../middlewares/admin');
 
-articleRouter.get('/articles/:page',
-  articleController.getArticles );
+articleRouter.get('/articles', 
+  articleController.getArticles
+);
 
-articleRouter.get('/articles/id/:id', 
-  articleController.getArticleById);
+articleRouter.get('/articles/:id', 
+  articleController.getArticleById
+);
 
 articleRouter.get('/articles/slug/:slug', 
-  articleController.getArticleBySlug);
+  articleController.getArticleBySlug
+);
 
 articleRouter.put('/articles/:id', 
-  articleController.updateArticle);
+  protectRouter, 
+  isAuthor,
+  articleController.updateArticle
+);
 
-articleRouter.post('/articles',
+articleRouter.post('/articles', 
+  protectRouter, 
+  isAuthor,
   upload.single('file'), 
   handleMulterErrors, 
-  articleController.createArticle);
+  articleController.createArticle
+);
 
 articleRouter.delete('/articles/:id', 
-  articleController.deleteArticle)
+  protectRouter, 
+  isAdmin, 
+  articleController.deleteArticle
+);
 
 module.exports = articleRouter;

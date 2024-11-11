@@ -56,6 +56,7 @@ exports.createUser = [ userAuthValidate, (req, res) => {
     email,
     telphone,
     password: hashPassword,
+    role
   })
 
   res.status(201).json({message: 'Usuário criado com sucesso'})
@@ -65,6 +66,28 @@ exports.createUser = [ userAuthValidate, (req, res) => {
   }
 })
 }]
+
+exports.updateUser =(req, res) => {
+  const {firstname, lastname, email, telphone, id} = req.body;
+
+  User.update(
+    {
+      firstname,
+      lastname,
+      email,
+      telphone
+    },{
+      where: {id: id}
+    })
+
+    .then(() => {
+      res.status(201).json({msg: 'Usuario atualizado com sucesso!'})
+    })
+
+    .catch(error => {
+      res.status(500).json({error: 'Erro ao atualizar usuario no banco de dados'})
+    })
+}
 
 exports.deleteUser = (req, res) => {
   const {id} = req.params;
