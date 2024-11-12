@@ -172,7 +172,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(204).json({ error: 'Ocorreu um erro no servidor' });
+  res.status(500).json({ errors: 'Erro no banco de dados' });
 });
 
 app.listen(PORT, () => {

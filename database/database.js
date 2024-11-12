@@ -14,14 +14,15 @@ const sequelize = new Sequelize(process.env.CONNECTING_STRING,
     }
   }
 );
- sequelize.authenticate()
- .then(() => {
-  console.log('Connection has been established successfully.');
- })
-  
- .catch (error => {
-  console.error('Unable to connect to the database:', error);
-})
+
+/*
+  sequelize.authenticate()
+  .then(() =>  {
+    console.log('Voce se conectou com sucesso!')
+  })
+  .catch(error => {
+    console.log('Erro ao se connectar com o banco de dados')
+  })*/
 
 module.exports = {
   sequelize, DataTypes

@@ -1,5 +1,4 @@
 const User = require('../models/userModel');
-const userAuthValidate = require('../validator/validUserAuth');
 const {validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
 
@@ -13,7 +12,8 @@ exports.getUsers = (req, res) => {
       }
     })
     .catch(error => {
-      res.status(500).json({ errors: error.message });
+      console.log(error)
+     return res.status(500).json({ errors: 'Erro no banco de dados' });
     });
 };
 
@@ -31,8 +31,15 @@ exports.getUser = (req, res) => {
     });
 };
 
-exports.createUser = [ userAuthValidate, (req, res) => {
-  const {firstname, lastname, email,  telphone, password, repeatPassword} = req.body;
+exports.createUser = (req, res) => {
+  const {
+    firstname, 
+    lastname, 
+    email,  
+    telphone, 
+    password, 
+    repeatPassword
+  } = req.body;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -65,7 +72,7 @@ exports.createUser = [ userAuthValidate, (req, res) => {
    return res.status(500).json({message: 'Houve um erro no servidor'})
   }
 })
-}]
+}
 
 exports.updateUser =(req, res) => {
   const {firstname, lastname, email, telphone, id} = req.body;

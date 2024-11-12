@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const userController = require('../controllers/userController');
 const protectRouter = require('../middlewares/protectRoutes');
 const isAdmin = require('../middlewares/admin');
+const userAuthValidate = require('../validator/validUserAuth');
 
 userRouter.get('/users', 
   protectRouter, 
@@ -17,7 +18,7 @@ userRouter.put('/users/:id',
   protectRouter, 
   userController.updateUser);
 
-userRouter.post('/users', 
+userRouter.post('/users', userAuthValidate,
   userController.createUser);
 
 userRouter.delete('/users/:id',
