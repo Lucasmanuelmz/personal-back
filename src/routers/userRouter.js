@@ -18,7 +18,8 @@ userRouter.put('/users/:id',
   protectRouter, 
   userController.updateUser);
 
-userRouter.post('/users', userAuthValidate,
+userRouter.post('/users', 
+  userAuthValidate,
   userController.createUser);
 
 userRouter.delete('/users/:id',

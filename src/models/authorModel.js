@@ -18,5 +18,6 @@ const Author = sequelize.define('author', {
 
 Author.belongsTo(User, {foreignKey: 'userId', as: 'user'});
 User.hasOne(Author, {foreignKey: 'userId', as: 'authorProfile'})
+Author.sync()
 
 module.exports = Author;

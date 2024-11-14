@@ -4,19 +4,19 @@ require('dotenv').config()
 const path = require('path');
 const articleRouter = require('./routers/articleRouter');
 const categoryRouter = require('./routers/categoryRouter');
-const PORT = process.env.PORT;
 const cors = require('cors');
 const userRouter = require('./routers/userRouter');
 const auth = require('./auth');
 const authorRoutes = require('./routers/authorRouter');
+require('./config/passport');
 
 app.use(cors())
 app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
-app.use(express.json());
 app.use(express.urlencoded({extended: true}))
+app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.json({
+  res.status(200).json({
     articles: {
       get: {
         description: 'Obtem todos os artigos',
@@ -175,6 +175,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ errors: 'Erro no banco de dados' });
 });
 
-app.listen(PORT, () => {
-  console.log('Servidor iniciado com sucessos', PORT)
-})
+module.exports = app;

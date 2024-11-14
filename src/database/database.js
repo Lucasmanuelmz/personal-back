@@ -1,7 +1,7 @@
 const {DataTypes, Sequelize} = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(process.env.CONNECTING_STRING,
+ const sequelize = new Sequelize(process.env.DATABASE_URL,
   {
     dialect: 'postgres',
     timezone: '+02:00',
@@ -14,15 +14,6 @@ const sequelize = new Sequelize(process.env.CONNECTING_STRING,
     }
   }
 );
-
-/*
-  sequelize.authenticate()
-  .then(() =>  {
-    console.log('Voce se conectou com sucesso!')
-  })
-  .catch(error => {
-    console.log('Erro ao se connectar com o banco de dados')
-  })*/
 
 module.exports = {
   sequelize, DataTypes

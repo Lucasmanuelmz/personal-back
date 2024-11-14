@@ -19,12 +19,12 @@ exports.getUsers = (req, res) => {
 
 exports.getUser = (req, res) => {
   const { id } = req.params;
-  User.findOne({ where: { id } })
+  User.findOne({ where: { id: id } })
     .then(user => {
       if (!user) {
         return res.status(404).json({ message: 'Usuario nao encontrado' });
       }
-      return res.status(200).json({ user });
+      return res.status(200).json({ user: user });
     })
     .catch(error => {
       res.status(500).json({ errors: 'Erro no servidor' });
@@ -38,6 +38,7 @@ exports.createUser = (req, res) => {
     email,  
     telphone, 
     password, 
+    role,
     repeatPassword
   } = req.body;
 
@@ -50,29 +51,39 @@ exports.createUser = (req, res) => {
     return res.status(400).json({ message: 'As senhas não coincidem' });
   }
 
-  bcrypt.hash(password, 10, async (error, hashPassword) => {
+  User.findOne({ where: { email } })
+    .then(user => {
+      if (user) {
+        return res.status(400).json({ message: 'Email já cadastrado' });
+      }
 
-  if(error) {
-    return res.status().json({message: 'Erro ao obter o password'})
-  }
+      return bcrypt.hash(password, 10);
+    })
+    .then(hashPassword => {
+      
+      if(res.headersSent) return;
 
-  try {
-  await User.create({
-    firstname,
-    lastname,
-    email,
-    telphone,
-    password: hashPassword,
-    role
-  })
+      return User.create({
+        firstname,
+        lastname,
+        email,
+        telphone,
+        password: hashPassword,
+        role
+      });
+    })
 
-  res.status(201).json({message: 'Usuário criado com sucesso'})
+    .then(() => {
+      if(res.headersSent) return;
+      res.status(201).json({ message: 'Usuário criado com sucesso' });
+    })
 
-}catch {
-   return res.status(500).json({message: 'Houve um erro no servidor'})
-  }
-})
-}
+    .catch(error => {
+      if(res.headersSent) return;
+      console.error(error);
+      res.status(500).json({ message: 'Houve um erro no servidor' });
+    });
+};
 
 exports.updateUser =(req, res) => {
   const {firstname, lastname, email, telphone, id} = req.body;
