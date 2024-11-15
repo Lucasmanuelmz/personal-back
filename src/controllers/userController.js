@@ -8,7 +8,7 @@ exports.getUsers = (req, res) => {
       if (users && users.length > 0) {
         return res.status(200).json({ users });
       } else {
-        return res.status(404).json({ message: 'Usuarios nao encontrados' });
+        return res.status(404).json({ message: 'Usuários nao encontrados' });
       }
     })
     .catch(error => {
@@ -22,7 +22,7 @@ exports.getUser = (req, res) => {
   User.findOne({ where: { id: id } })
     .then(user => {
       if (!user) {
-        return res.status(404).json({ message: 'Usuario nao encontrado' });
+        return res.status(404).json({ message: 'Usuário nao encontrado' });
       }
       return res.status(200).json({ user: user });
     })
@@ -85,32 +85,36 @@ exports.createUser = (req, res) => {
     });
 };
 
-exports.updateUser =(req, res) => {
-  const {firstname, lastname, email, telphone, id} = req.body;
+exports.updateUser = (req, res) => {
+  const { firstname, lastname, email, telphone, id } = req.body;
 
-  User.update(
-    {
-      firstname,
-      lastname,
-      email,
-      telphone
-    },{
-      where: {id: id}
+  User.findOne({ where: { id } })
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ msg: 'Este usuário não existe' });
+      }
+
+      return User.update(
+        { firstname, lastname, email, telphone },
+        { where: { id } }
+      )
+        .then(() => {
+          res.status(200).json({firstname, lastname, email, telphone});
+        })
+        .catch(error => {
+          res.status(500).json({ error: 'Erro ao atualizar usuário no banco de dados', details: error.message });
+        });
     })
-
-    .then(() => {
-      res.status(201).json({msg: 'Usuario atualizado com sucesso!'})
-    })
-
     .catch(error => {
-      res.status(500).json({error: 'Erro ao atualizar usuario no banco de dados'})
-    })
-}
+      return res.status(500).json({ msg: 'Erro interno no banco de dados', details: error.message });
+    });
+};
+
 
 exports.deleteUser = (req, res) => {
   const {id} = req.params;
   User.destroy({where: {id: id}}).then(() => {
-    res.status(200).json({message: 'Usuario apagado com sucesso'})
+    res.status(200).json({message: 'Usuário apagado com sucesso'})
   })
 
   .catch(error => {

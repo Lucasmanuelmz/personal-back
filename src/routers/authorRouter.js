@@ -5,7 +5,7 @@ const protectRouter = require('../middlewares/protectRoutes');
 const isAdmin = require('../middlewares/admin');
 const isAuthor = require('../middlewares/author');
 
-authorRoutes.post('/authors', 
+authorRoutes.post('/authors/:id', 
   protectRouter, 
   authorController.createAuthor);
 

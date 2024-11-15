@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../src/app');
-const User = require('../src/models/userModel');
+const app = require('../../src/app');
+const User = require('../../src/models/userModel');
 
 describe('Get/ retornar dados', () => { 
 
@@ -95,10 +95,10 @@ describe('Autenticação e Acesso à Rota de Usuários', () => {
     });
   });
 
-  describe('GET /users/1 - Retornar usuario com id 1', () => {
-    test('Deve retornar o primeiro usuario do banco de dados e status 200', () => {
+  describe('GET /users/2 - Retornar usuário com id 2', () => {
+    test('Deve retornar o primeiro usuário do banco de dados e status 200', () => {
       return request(app)
-      .get('/users/1')
+      .get('/users/2')
       .set('Authorization', `Bearer ${token}`)
       .then(response => {
         expect(response.statusCode).toBe(200);
@@ -108,3 +108,38 @@ describe('Autenticação e Acesso à Rota de Usuários', () => {
   })
 });
 
+describe('PUT /users/38 - Atualizar usuário', () => {
+  test('Deve atualizar usuário e retornar status 200', () => {
+    return request(app)
+      .put('/users/38')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        firstname: 'Lucas',
+        lastname: 'Jofrisse',
+        email: 'jofrisse2@gmail.com',
+        telphone: '875397902',
+        id: 38
+      })
+      .then(response => {
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('firstname', 'Lucas');
+        expect(response.body).toHaveProperty('lastname', 'Jofrisse');
+        expect(response.body).toHaveProperty('email', 'jofrisse2@gmail.com');
+        expect(response.body).toHaveProperty('telphone', '875397902');
+      });
+  });
+});
+
+describe('DELETE /users/40 - Apagar usuário do bancode dados', ()=> {
+  test('Deve apagar o usuário do banco de dados, retornar status 200 e uma mensagem de sucesso', () => {
+    return request(app)
+    .delete('/users/40')
+    .send({id: 40})
+    .set('Authorization', `Bearer ${token}`)
+    .then(response => {
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toBeDefined()
+      expect(response.body).toHaveProperty('message', 'Usuário apagado com sucesso');
+    })
+  })
+})
