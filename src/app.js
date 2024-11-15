@@ -9,11 +9,17 @@ const userRouter = require('./routers/userRouter');
 const auth = require('./auth');
 const authorRoutes = require('./routers/authorRouter');
 require('./config/passport');
+const protectErrorsLog = require('./middlewares/privateError')
+const helmet = require('helmet');
+const compression = require('compression');
 
-app.use(cors())
+app.use(compression());
+app.use(helmet());
+app.use(cors());
 app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
+app.use(protectErrorsLog());
 
 app.get('/', (req, res) => {
   res.status(200).json({
