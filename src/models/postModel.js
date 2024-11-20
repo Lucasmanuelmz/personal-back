@@ -32,4 +32,6 @@ Article.belongsTo(Category);
 Category.hasMany(Article);
 
 Article.sync({alter: true})
+
+Article.sync()
 module.exports = Article;
