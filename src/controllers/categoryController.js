@@ -38,7 +38,7 @@ exports.createCategory = (req, res) => {
   const {name} = req.body;
   Category.create({
     name,
-    slug: slugify(name)
+    slug: slugify(name, {lower: true})
   })
   .then(() => {
   res.status(201).json({msg: 'Categoria criada com sucesso'})

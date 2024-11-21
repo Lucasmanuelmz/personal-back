@@ -75,7 +75,7 @@ exports.createArticle = [articleValidate, (req, res) => {
 
   Article.create({
     title: title,
-    slug: slugify(title),
+    slug: slugify(title, {lower: true}),
     description: description,
     categoryId: categoryId,
     url: url,
