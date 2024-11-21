@@ -71,37 +71,37 @@ app.get('/', (req, res) => {
         description: 'Obtem todas as categorias',
         method: 'GET',
         endpoint: '/categories',
-        example: 'curl -X GET https://api.devlucas.icu/categories'
+        example: 'curl -X GET https://api.devlucas.icu/articles/categories'
       },
       post: {
         description: 'Cria uma nova categoria',
         method: 'POST',
         endpoint: '/categories',
-        example: 'curl -X POST https://api.devlucas.icu/categories -H "Content-Type: application/json" -d \'{"name": "Nova Categoria"}\''
+        example: 'curl -X POST https://api.devlucas.icu/articles/categories -H "Content-Type: application/json" -d \'{"name": "Nova Categoria"}\''
       },
       getId: {
         description: 'Obtem uma categoria pelo ID',
         method: 'GET',
         endpoint: '/categories/:id',
-        example: 'curl -X GET https://api.devlucas.icu/categories/1'
+        example: 'curl -X GET https://api.devlucas.icu/articles/categories/1'
       },
       getSlug: {
         description: 'Obtem uma categoria pelo slug',
         method: 'GET',
         endpoint: '/categories/slug/:slug',
-        example: 'curl -X GET https://api.devlucas.icu/categories/slug/exemplo-de-slug'
+        example: 'curl -X GET https://api.devlucas.icu/articles/categories/slug/exemplo-de-slug'
       },
       put: {
         description: 'Atualiza uma categoria',
         method: 'PUT',
         endpoint: '/categories/:id',
-        example: 'curl -X PUT https://api.devlucas.icu/categories/1 -H "Content-Type: application/json" -d \'{"name": "Categoria Atualizada"}\''
+        example: 'curl -X PUT https://api.devlucas.icu/articles/categories/1 -H "Content-Type: application/json" -d \'{"name": "Categoria Atualizada"}\''
       },
       delete: {
         description: 'Apaga uma categoria',
         method: 'DELETE',
         endpoint: '/categories/:id',
-        example: 'curl -X DELETE https://api.devlucas.icu/categories/1'
+        example: 'curl -X DELETE https://api.devlucas.icu/articles/categories/1'
       }
     },
     users: {
