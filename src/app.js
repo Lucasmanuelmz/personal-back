@@ -12,7 +12,8 @@ require('./config/passport');
 const protectErrorsLog = require('./middlewares/privateError')
 const helmet = require('helmet');
 const compression = require('compression');
-const currentUser = require('./middlewares/currentUser')
+const currentUser = require('./middlewares/currentUser');
+const passwordRouter = require('./passwordRouter/index');
 
 app.use(compression());
 app.use(helmet());
@@ -27,6 +28,18 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(protectErrorsLog());
 app.use(currentUser)
+
+app.get('/profile', currentUser, (req, res) => {
+  const user = {
+    id: req.user.id,
+    firstname: req.user.firstname,
+    lastname: req.user.lastname,
+    username: req.user.email,
+    phone: req.user.telphone,
+  }
+  
+  res.status(200).json({success: true, user})
+})
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -178,6 +191,7 @@ app.use('/', articleRouter);
 app.use('/', userRouter);
 app.use('/', auth);
 app.use('/', authorRoutes);
+app.use('/users', passwordRouter)
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Rota não encontrada' });
