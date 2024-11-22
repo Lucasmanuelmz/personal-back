@@ -72,17 +72,17 @@ exports.getAuthorById = (req, res) => {
         links: [
           {
             href: `https://api.devlucas.icu/authors`,
-            rel: 'author',
+            rel: 'get',
             method: 'GET',
           },
           {
             href: `https://api.devlucas.icu/authors/${id}`,
-            rel: 'author',
+            rel: 'update',
             method: 'UPDATE',
           },
           {
             href: `https://api.devlucas.icu/authors/${id}`,
-            rel: 'author',
+            rel: 'dalete',
             method: 'DELETE',
           },
           {
