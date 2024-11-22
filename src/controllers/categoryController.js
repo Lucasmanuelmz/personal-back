@@ -11,7 +11,7 @@ const Article = require('../models/postModel')
   
         res.status(200).json({ 
           success: true,
-          data: categories 
+          categories 
         });
       })
       .catch(error => {
