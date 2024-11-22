@@ -193,7 +193,7 @@ app.get('/', (req, res) => {
   });
 });
 app.use('/', articleRouter);
-app.use('/articles/', categoryRouter);
+app.use('/', categoryRouter);
 app.use(currentUser)
 
 app.get('/profile', currentUser, (req, res) => {

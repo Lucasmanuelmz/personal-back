@@ -5,23 +5,23 @@ const categoryController = require('../controllers/categoryController');
 const protectRouter = require('../middlewares/protectRoutes');
 const isAdmin = require('../middlewares/admin');
 
-categoryRouter.get('/categories', 
+categoryRouter.get('articles/categories', 
   categoryController.getCategories);
 
-categoryRouter.get('/categories/:slug', 
+categoryRouter.get('articles/categories/:slug', 
   categoryController.getCategoryBySlug);
 
-categoryRouter.post('/categories', 
+categoryRouter.post('articles/categories', 
   protectRouter, 
   isAdmin, 
   categoryController.createCategory);
 
-categoryRouter.put('/categories/:id', 
+categoryRouter.put('articles/categories/:id', 
   protectRouter, 
   isAdmin, 
   categoryController.updateCategory);
 
-categoryRouter.delete('/categories/:id', 
+categoryRouter.delete('articles/categories/:id', 
   protectRouter, 
   isAdmin, 
   categoryController.deleteCategory);
