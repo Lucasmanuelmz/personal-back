@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
   res.status(200).json({
     articles: {
       get: {
-        description: 'Obtem todos os artigos',
+        description: 'Obtém todos os artigos',
         method: 'GET',
         endpoint: '/articles',
         example: 'curl -X GET https://api.devlucas.icu/articles'
@@ -57,13 +57,13 @@ app.get('/', (req, res) => {
         example: 'curl -X POST https://api.devlucas.icu/articles -H "Content-Type: application/json" -d \'{"title": "Novo Artigo", "content": "Conteúdo do artigo"}\''
       },
       getId: {
-        description: 'Obtem um artigo pelo ID',
+        description: 'Obtém um artigo pelo ID',
         method: 'GET',
         endpoint: '/articles/:id',
         example: 'curl -X GET https://api.devlucas.icu/articles/1'
       },
       getSlug: {
-        description: 'Obtem um artigo pelo slug',
+        description: 'Obtém um artigo pelo slug',
         method: 'GET',
         endpoint: '/articles/slug/:slug',
         example: 'curl -X GET https://api.devlucas.icu/articles/slug/exemplo-de-slug'
@@ -83,48 +83,48 @@ app.get('/', (req, res) => {
     },
     categories: {
       get: {
-        description: 'Obtem todas as categorias',
+        description: 'Obtém todas as categorias',
         method: 'GET',
         endpoint: '/categories',
-        example: 'curl -X GET https://api.devlucas.icu/articles/categories'
+        example: 'curl -X GET https://api.devlucas.icu/categories'
       },
       post: {
         description: 'Cria uma nova categoria',
         method: 'POST',
         endpoint: '/categories',
-        example: 'curl -X POST https://api.devlucas.icu/articles/categories -H "Content-Type: application/json" -d \'{"name": "Nova Categoria"}\''
+        example: 'curl -X POST https://api.devlucas.icu/categories -H "Content-Type: application/json" -d \'{"name": "Nova Categoria"}\''
       },
       getId: {
-        description: 'Obtem uma categoria pelo ID',
+        description: 'Obtém uma categoria pelo ID',
         method: 'GET',
         endpoint: '/categories/:id',
-        example: 'curl -X GET https://api.devlucas.icu/articles/categories/1'
+        example: 'curl -X GET https://api.devlucas.icu/categories/1'
       },
       getSlug: {
-        description: 'Obtem uma categoria pelo slug',
+        description: 'Obtém uma categoria pelo slug',
         method: 'GET',
         endpoint: '/categories/slug/:slug',
-        example: 'curl -X GET https://api.devlucas.icu/articles/categories/slug/exemplo-de-slug'
+        example: 'curl -X GET https://api.devlucas.icu/categories/slug/exemplo-de-slug'
       },
       put: {
         description: 'Atualiza uma categoria',
         method: 'PUT',
         endpoint: '/categories/:id',
-        example: 'curl -X PUT https://api.devlucas.icu/articles/categories/1 -H "Content-Type: application/json" -d \'{"name": "Categoria Atualizada"}\''
+        example: 'curl -X PUT https://api.devlucas.icu/categories/1 -H "Content-Type: application/json" -d \'{"name": "Categoria Atualizada"}\''
       },
       delete: {
         description: 'Apaga uma categoria',
         method: 'DELETE',
         endpoint: '/categories/:id',
-        example: 'curl -X DELETE https://api.devlucas.icu/articles/categories/1'
+        example: 'curl -X DELETE https://api.devlucas.icu/categories/1'
       }
     },
     users: {
       get: {
-        description: 'Obtem todos os usuários',
+        description: 'Obtém todos os usuários',
         method: 'GET',
         endpoint: '/users',
-        example: 'curl -X GET hhttps://api.devlucas.icu/users'
+        example: 'curl -X GET https://api.devlucas.icu/users'
       },
       post: {
         description: 'Cria um novo usuário',
@@ -133,7 +133,7 @@ app.get('/', (req, res) => {
         example: 'curl -X POST https://api.devlucas.icu/users -H "Content-Type: application/json" -d \'{"firstname": "novousuario", "email": "email@exemplo.com"}\''
       },
       getId: {
-        description: 'Obtem um usuário pelo ID',
+        description: 'Obtém um usuário pelo ID',
         method: 'GET',
         endpoint: '/users/:id',
         example: 'curl -X GET https://api.devlucas.icu/users/1'
@@ -153,7 +153,7 @@ app.get('/', (req, res) => {
     },
     authors: {
       get: {
-        description: 'Obtem todos os autores',
+        description: 'Obtém todos os autores',
         method: 'GET',
         endpoint: '/authors',
         example: 'curl -X GET https://api.devlucas.icu/authors'
@@ -162,10 +162,10 @@ app.get('/', (req, res) => {
         description: 'Cria um novo autor',
         method: 'POST',
         endpoint: '/authors',
-        example: 'curl -X POST https://api.devlucas.icu/authors -H "Content-Type: application/json" -d \'{"firstname": "novoautor", "bio": "Resumo da biografia neste espaco"}\''
+        example: 'curl -X POST https://api.devlucas.icu/authors -H "Content-Type: application/json" -d \'{"firstname": "novoautor", "bio": "Resumo da biografia neste espaço"}\''
       },
       getId: {
-        description: 'Obtem um autor pelo ID',
+        description: 'Obtém um autor pelo ID',
         method: 'GET',
         endpoint: '/authors/:id',
         example: 'curl -X GET https://api.devlucas.icu/authors/1'
@@ -177,10 +177,30 @@ app.get('/', (req, res) => {
         example: 'curl -X PUT https://api.devlucas.icu/authors/1 -H "Content-Type: application/json" -d \'{"firstname": "autoratualizado"}\''
       },
       delete: {
-        description: 'Apaga um author',
+        description: 'Apaga um autor',
         method: 'DELETE',
-        endpoint: '/users/:id',
-        example: 'curl -X DELETE https://api.devlucas.icu/authors/1',
+        endpoint: '/authors/:id',
+        example: 'curl -X DELETE https://api.devlucas.icu/authors/1'
+      }
+    },
+    password: {
+      forgetPassword: {
+        description: 'Solicitar recuperação de senha',
+        method: 'POST',
+        endpoint: '/users/forgot-password',
+        example: 'curl -X POST https://api.devlucas.icu/users/forgot-password -H "Content-Type: application/json" -d \'{"email": "seuemail@exemplo.com"}\''
+      },
+      resetPassword: {
+        description: 'Recuperar senha com token',
+        method: 'GET',
+        endpoint: '/users/reset-password/:token',
+        example: 'curl -X GET https://api.devlucas.icu/users/reset-password/${token}'
+      },
+      updatePassword: {
+        description: 'Redefinir senha',
+        method: 'POST',
+        endpoint: '/users/reset-password/:token',
+        example: 'curl -X POST https://api.devlucas.icu/users/reset-password/${token} -H "Content-Type: application/json" -d \'{"password": "nova senha"}\''
       }
     }
   });
