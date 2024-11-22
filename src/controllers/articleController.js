@@ -36,7 +36,32 @@ exports.getArticleById = (req, res) => {
   const {id} = req.params;
   Article.findByPk(id, { include: [{ model: Category }, { model: Author }] })
   .then(article => {
-    res.status(200).json({article});
+    const response = {
+      article,
+      links: [
+        {
+          href: `https://api.devlucas.icu/articles`,
+          rel: 'get-all',
+          method: 'GET',
+        },
+        {
+          href: `https://api.devlucas.icu/articles`,
+          rel: 'create',
+          method: 'POST',
+        },
+        {
+          href: `https://api.devlucas.icu/articles/${id}`,
+          rel: 'update',
+          method: 'UPDATE',
+        },
+        {
+          href: `https://api.devlucas.icu/articles/${id}`,
+          rel: 'delete',
+          method: 'DELETE',
+        },
+      ]
+    }
+    res.status(200).json({response});
   })
   .catch(error => {
     res.status(500).json({error: 'Erro ao obter os artigos', detail: error.message});
@@ -66,7 +91,7 @@ exports.getArticleBySlug = (req, res) => {
         .then(relatedArticles => {
           const links = relatedArticles.map(related => ({
             rel: 'related',
-            href: `${baseUrl}/articles/${related.slug}`
+            href: `https://api.devlucas.icu/articles/${related.slug}`
           }));
 
           res.status(200).json({

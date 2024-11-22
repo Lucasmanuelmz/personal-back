@@ -55,19 +55,52 @@ exports.getAuthors = (req, res) => {
 
 exports.getAuthorById = (req, res) => {
   const { id } = req.params;
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ msg: 'Usuário não autenticado.' });
+  }
 
   Author.findByPk(id)
     .then((author) => {
       if (!author) {
         return res.status(404).json({ msg: 'Autor não encontrado no banco de dados.' });
       }
-      res.status(200).json({ author });
+
+      const response = {
+        author,
+        links: [
+          {
+            href: `https://api.devlucas.icu/authors`,
+            rel: 'author',
+            method: 'GET',
+          },
+          {
+            href: `https://api.devlucas.icu/authors/${id}`,
+            rel: 'author',
+            method: 'UPDATE',
+          },
+          {
+            href: `https://api.devlucas.icu/authors/${id}`,
+            rel: 'author',
+            method: 'DELETE',
+          },
+          {
+            href: `https://api.devlucas.icu/authors?userId=${userId}`,
+            rel: 'create-author',
+            method: 'POST',
+          },
+        ],
+      };
+
+      res.status(200).json(response);
     })
     .catch((error) => {
       console.error(error);
       res.status(500).json({ error: 'Erro no servidor ao buscar autor.' });
     });
 };
+
 
 exports.updateAuthor =[validateUpdateAuthor, (req, res) => {
   const { firstname, lastname, bio } = req.body;
