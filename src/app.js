@@ -27,19 +27,6 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(protectErrorsLog());
-app.use(currentUser)
-
-app.get('/profile', currentUser, (req, res) => {
-  const user = {
-    id: req.user.id,
-    firstname: req.user.firstname,
-    lastname: req.user.lastname,
-    username: req.user.email,
-    phone: req.user.telphone,
-  }
-  
-  res.status(200).json({success: true, user})
-})
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -205,9 +192,21 @@ app.get('/', (req, res) => {
     }
   });
 });
-
-app.use('/articles/', categoryRouter);
 app.use('/', articleRouter);
+app.use('/articles/', categoryRouter);
+app.use(currentUser)
+
+app.get('/profile', currentUser, (req, res) => {
+  const user = {
+    id: req.user.id,
+    firstname: req.user.firstname,
+    lastname: req.user.lastname,
+    username: req.user.email,
+    phone: req.user.telphone,
+  }
+  
+  res.status(200).json({success: true, user})
+})
 app.use('/', userRouter);
 app.use('/', auth);
 app.use('/', authorRoutes);
