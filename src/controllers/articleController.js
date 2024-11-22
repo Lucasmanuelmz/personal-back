@@ -1,5 +1,6 @@
 const Article = require('../models/postModel');
 const Category = require('../models/categoryModel');
+const Author = require('../models/authorModel');
 require('dotenv').config();
 const slugify = require('slugify');
 const articleValidate = require('../validator/articleValidate');
@@ -10,8 +11,9 @@ const baseUrl = process.env.BASE_URL;
 exports.getArticles = (req, res) => {
   const page = parseInt(req.params.page) || 1;
   const offset = (page - 1) * 9;
+
   Article.findAndCountAll({
-    include: { model: Category },
+    include: [{ model: Category }, {model: Author}],
     limit: 9, 
     offset: offset
   })
@@ -32,7 +34,7 @@ exports.getArticles = (req, res) => {
 
 exports.getArticleById = (req, res) => {
   const {id} = req.params;
-  Article.findByPk(id)
+  Article.findByPk(id, { include: [{ model: Category }, { model: Author }] })
   .then(article => {
     res.status(200).json({article});
   })
@@ -45,22 +47,40 @@ exports.getArticleBySlug = (req, res) => {
   const { slug } = req.params;
 
   Article.findOne({
-    where: { slug: slug },
-    include: { model: Category }
+    where: { slug },
+    include: [{ model: Category }, { model: Author }]
   })
-  .then(article => {
-    if (!article) {
-      console.log('Artigo não encontrado para o slug: ' + slug);
-      return res.status(404).json({ error: 'Artigo não encontrado' });
-    }
-    console.log('Consegui receber o artigo: ', article);
-    res.status(200).json({ article });
-  })
-  .catch(error => {
-    console.error('Erro ao obter o artigo:', error.message);
-    res.status(500).json({ error: 'Erro ao obter o artigo', detail: error.message });
-  });
+    .then(article => {
+      if (!article) {
+        return res.status(404).json({ error: 'Artigo não encontrado' });
+      }
+
+      Article.findAll({
+        where: {
+          categoryId: article.categoryId,
+          id: { [Op.ne]: article.id } 
+        },
+        limit: 6,
+        order: [['id', 'ASC']]
+      })
+        .then(relatedArticles => {
+          const links = relatedArticles.map(related => ({
+            rel: 'related',
+            href: `${baseUrl}/articles/${related.slug}`
+          }));
+
+          res.status(200).json({
+            article,
+            links
+          });
+        });
+    })
+    .catch(error => {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao obter o artigo', detail: error.message });
+    });
 };
+
 
 exports.createArticle = [articleValidate, (req, res) => {
 
@@ -73,9 +93,18 @@ exports.createArticle = [articleValidate, (req, res) => {
     return res.status(400).json({errors: errors.array()})
   }
 
+  const slug = slugify(title, { lower: true });
+
+  Article.findOne({ where: { slug } })
+  .then(existingArticle => {
+
+    if (existingArticle) {
+      return res.status(400).json({ error: 'Título já em uso, escolha outro' });
+    }
+
   Article.create({
     title: title,
-    slug: slugify(title, {lower: true}),
+    slug: slug,
     description: description,
     categoryId: categoryId,
     url: url,
@@ -87,10 +116,19 @@ exports.createArticle = [articleValidate, (req, res) => {
  .catch(error => {
   res.status(400).json({error: 'Não foi possível criar o artigo', detail: error.message})
  })
+})
+.catch(error => {
+  return res.status(500).json({message: 'Erro no banco de dados '+error.message})
+})
 }];
 
 exports.updateArticle =[validateUpdateArticle, (req, res) => {
-  const {title, description, article, id} = req.body;
+  const {title, description, article} = req.body;
+  const { id } = req.params;
+
+  if (!id || isNaN(Number(id))) {
+    return res.status(400).json({ error: 'ID inválido fornecido' });
+  }
 
   const errors = validationResult(req);
 
@@ -114,12 +152,15 @@ exports.updateArticle =[validateUpdateArticle, (req, res) => {
 
 exports.deleteArticle = (req, res) => {
   const { id } = req.params;
+  if (!id || isNaN(Number(id))) {
+    return res.status(400).json({ error: 'ID inválido fornecido' });
+  }
   Article.findByPk(id)
     .then(article => {
       if (!article) {
         return res.status(404).json({ error: 'Artigo não encontrado' });
       }
-      return Article.destroy({ where: { id: id } });
+      return Article.destroy({ where: { id: id }, individualHooks: true });
     })
     .then(() => {
       res.status(200).json({ msg: 'Artigo apagado com sucesso' });

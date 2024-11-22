@@ -1,18 +1,28 @@
 const Category = require('../models/categoryModel');
 const slugify = require('slugify');
-  const Article = require('../models/postModel');
+const Article = require('../models/postModel')
 
-exports.getCategories = (req, res) => {
-  Category.findAll({include: Article})
-
-  .then(categories => {
-    res.status(200).json({categories})
-  })
-
-  .catch(error => {
-    res.status(500).json({error: 'Erro ao obter as categorias', detail: error.message})
-  })
-}
+  exports.getCategories = (req, res) => {
+    Category.findAll()
+      .then(categories => {
+        if (!categories.length) {
+          return res.status(404).json({ message: 'Nenhuma categoria encontrada' });
+        }
+  
+        res.status(200).json({ 
+          success: true,
+          data: categories 
+        });
+      })
+      .catch(error => {
+        console.error('Erro ao obter categorias:', error.message);
+        res.status(500).json({ 
+          success: false, 
+          message: 'Erro ao obter as categorias', 
+          detail: error.message 
+        });
+      });
+  };  
 
 exports.getCategoryBySlug = (req, res) => {
   const { slug } = req.params;
@@ -49,19 +59,36 @@ exports.createCategory = (req, res) => {
 }
 
 exports.updateCategory = (req, res) => {
-  const {name} = req.body;
-  Category.update({
-    name
-  }, {
-    where: {id: id}
-  })
-  .then(() => {
-    res.status(200).json({msg: 'categoria atualizado com sucesso!'})
-  })
-  .catch(error => {
-    res.status(400).json({error: 'Tivemos problemas ao atualizar a categoria', detail: error.message})
-  })
-}
+  const { name } = req.body;
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ error: 'O ID da categoria é obrigatório' });
+  }
+
+  Category.update(
+    {
+      name,
+      slug: slugify(name, { lower: true }),
+    },
+    {
+      where: { id },
+    }
+  )
+    .then(([rowsUpdated]) => {
+      if (rowsUpdated === 0) {
+        return res.status(404).json({ error: 'Categoria não encontrada' });
+      }
+      res.status(200).json({ msg: 'Categoria atualizada com sucesso!' });
+    })
+    .catch((error) => {
+      res.status(400).json({
+        error: 'Tivemos problemas ao atualizar a categoria',
+        detail: error.message,
+      });
+    });
+};
+
 
 exports.deleteCategory =(req, res) => {
   const {id} = req.params;

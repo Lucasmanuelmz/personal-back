@@ -20,8 +20,6 @@ const Author = sequelize.define('author', {
 Author.belongsTo(User, {foreignKey: 'userId', as: 'user'});
 User.hasOne(Author, {foreignKey: 'userId', as: 'authorProfile'});
 
-Author.hasMany(Article, { foreignKey: 'authorId', as: 'articles' });
-Article.belongsTo(Author, { foreignKey: 'authorId', as: 'author' });
 Author.sync({alter: true})
 
 module.exports = Author;

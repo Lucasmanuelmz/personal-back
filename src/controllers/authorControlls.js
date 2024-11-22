@@ -11,7 +11,7 @@ exports.createAuthor = [validateAuthor, (req, res) => {
     return res.status(400).json({errors: errors.array()})
   }
 
-  Author.findOne({where: {id: id}})
+  Author.findOne({where: {userId: id}})
   .then(author => {
     
    if(author) {

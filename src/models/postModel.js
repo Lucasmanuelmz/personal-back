@@ -1,5 +1,6 @@
 const {DataTypes, sequelize} = require('../database/database');
 const Category = require('./categoryModel')
+const Author = require('./authorModel');
 
 const Article = sequelize.define(
   'article', {
@@ -31,7 +32,9 @@ const Article = sequelize.define(
 Article.belongsTo(Category);
 Category.hasMany(Article);
 
+Article.belongsTo(Author);
+Author.hasMany(Article)
+
 Article.sync({alter: true})
 
-Article.sync()
 module.exports = Article;
