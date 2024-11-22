@@ -12,6 +12,7 @@ require('./config/passport');
 const protectErrorsLog = require('./middlewares/privateError')
 const helmet = require('helmet');
 const compression = require('compression');
+const currentUser = require('./middlewares/currentUser')
 
 app.use(compression());
 app.use(helmet());
@@ -25,6 +26,7 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
 app.use(protectErrorsLog());
+app.use(currentUser)
 
 app.get('/', (req, res) => {
   res.status(200).json({
