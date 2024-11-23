@@ -189,7 +189,9 @@ app.get('/', (req, res) => {
 });
 app.use('/', articleRouter);
 app.use('/', categoryRouter);
-app.use(currentUser)
+app.use('/', userRouter);
+app.use('/', auth);
+app.use(currentUser) 
 
 app.get('/profile', currentUser, (req, res) => {
   const user = {
@@ -199,11 +201,10 @@ app.get('/profile', currentUser, (req, res) => {
     username: req.user.email,
     phone: req.user.telphone,
   }
-  
+
   res.status(200).json({success: true, user})
 })
-app.use('/', userRouter);
-app.use('/', auth);
+
 app.use('/', authorRoutes);
 app.use('/users', passwordRouter)
 
