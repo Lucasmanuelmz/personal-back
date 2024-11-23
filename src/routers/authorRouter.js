@@ -4,28 +4,34 @@ const authorController = require('../controllers/authorControlls');
 const protectRouter = require('../middlewares/protectRoutes');
 const isAdmin = require('../middlewares/admin');
 const isAuthor = require('../middlewares/author');
+const currentUser = require('../middlewares/currentUser');
 
-authorRoutes.post('/authors/:id', 
+authorRoutes.post('/authors/:id',  
   protectRouter, 
+  currentUser, 
   authorController.createAuthor);
 
-authorRoutes.get('/authors', 
+authorRoutes.get('/authors',
   protectRouter, 
+  currentUser, 
   isAdmin, 
   authorController.getAuthors);
 
-authorRoutes.get('/authors/:id', 
+authorRoutes.get('/authors/:id',
   protectRouter, 
+  currentUser,
   isAuthor, 
   authorController.getAuthorById);
 
 authorRoutes.put('/authors/:id',
   protectRouter, 
+  currentUser,
   isAuthor, 
   authorController.updateAuthor);
 
 authorRoutes.delete('/authors/:id', 
-  protectRouter, 
+  protectRouter,  
+  currentUser,
   isAdmin, 
   authorController.deleteAuthor);
   

@@ -6,6 +6,7 @@ const handleMulterErrors = require('../middlewares/errors');
 const protectRouter = require('../middlewares/protectRoutes');
 const isAuthor = require('../middlewares/author');
 const isAdmin = require('../middlewares/admin');
+const currentUser = require('../middlewares/currentUser')
 
 articleRouter.get('/articles', 
   articleController.getArticles
@@ -21,20 +22,23 @@ articleRouter.get('/articles/slug/:slug',
 
 articleRouter.put('/articles/:id', 
   protectRouter, 
+  currentUser,
   isAuthor,
   articleController.updateArticle
 );
 
-articleRouter.post('/articles', 
+articleRouter.post('/articles',  
   protectRouter, 
+  currentUser,
   isAuthor,
   upload.single('file'), 
   handleMulterErrors, 
   articleController.createArticle
 );
 
-articleRouter.delete('/articles/:id', 
+articleRouter.delete('/articles/:id',   
   protectRouter, 
+  currentUser,
   isAdmin, 
   articleController.deleteArticle
 );

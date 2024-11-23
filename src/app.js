@@ -191,8 +191,6 @@ app.use('/', articleRouter);
 app.use('/', categoryRouter);
 app.use('/', userRouter);
 app.use('/', auth);
-app.use(currentUser) 
-
 app.get('/profile', currentUser, (req, res) => {
   const user = {
     id: req.user.id,
