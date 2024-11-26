@@ -1,33 +1,34 @@
 const User = require('../models/userModel');
-const {validationResult} = require('express-validator');
+const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 exports.getUsers = (req, res) => {
   User.findAll()
     .then(users => {
-      if (users && users.length > 0) {
+      if (users.length > 0) {
         return res.status(200).json({ users });
       } else {
-        return res.status(404).json({ message: 'Usuários nao encontrados' });
+        return res.status(404).json({ message: 'Usuários não encontrados' });
       }
     })
     .catch(error => {
-      console.log(error)
-     return res.status(500).json({ errors: 'Erro no banco de dados' });
+      console.error(error);
+      return res.status(500).json({ message: 'Erro no banco de dados' });
     });
 };
 
 exports.getUser = (req, res) => {
   const { id } = req.params;
-  User.findOne({ where: { id: id } })
+  User.findOne({ where: { id } })
     .then(user => {
       if (!user) {
-        return res.status(404).json({ message: 'Usuário nao encontrado' });
+        return res.status(404).json({ message: 'Usuário não encontrado' });
       }
-      return res.status(200).json({ user: user });
+      return res.status(200).json({ user });
     })
     .catch(error => {
-      res.status(500).json({ errors: 'Erro no servidor' });
+      console.error(error);
+      return res.status(500).json({ message: 'Erro no servidor' });
     });
 };
 
@@ -56,13 +57,9 @@ exports.createUser = (req, res) => {
       if (user) {
         return res.status(400).json({ message: 'Email já cadastrado' });
       }
-
-      return bcrypt.hash(password, 10);
+      return bcrypt.hash(password, 10); 
     })
     .then(hashPassword => {
-      
-      if(res.headersSent) return;
-
       return User.create({
         firstname,
         lastname,
@@ -72,52 +69,55 @@ exports.createUser = (req, res) => {
         role
       });
     })
-
     .then(() => {
-      if(res.headersSent) return;
-      res.status(201).json({ message: 'Usuário criado com sucesso' });
+      return res.status(201).json({ message: 'Usuário criado com sucesso' });
     })
-
     .catch(error => {
-      if(res.headersSent) return;
       console.error(error);
-      res.status(500).json({ message: 'Houve um erro no servidor' });
+      return res.status(500).json({ message: 'Houve um erro no servidor' });
     });
 };
 
 exports.updateUser = (req, res) => {
-  const { firstname, lastname, email, telphone, id } = req.body;
+  const { firstname, lastname, email, telphone, password, id } = req.body;
 
   User.findOne({ where: { id } })
     .then(user => {
       if (!user) {
-        return res.status(404).json({ msg: 'Este usuário não existe' });
+        return res.status(404).json({ message: 'Usuário não encontrado' });
       }
 
-      return User.update(
-        { firstname, lastname, email, telphone },
-        { where: { id } }
-      )
-        .then(() => {
-          res.status(200).json({firstname, lastname, email, telphone});
-        })
-        .catch(error => {
-          res.status(500).json({ error: 'Erro ao atualizar usuário no banco de dados', details: error.message });
+      const updateData = { firstname, lastname, email, telphone };
+      if (password) {
+        return bcrypt.hash(password, 10).then(hashPassword => {
+          updateData.password = hashPassword; 
+          return User.update(updateData, { where: { id } });
         });
+      } else {
+        return User.update(updateData, { where: { id } });
+      }
+    })
+    .then(() => {
+      return res.status(200).json({ message: 'Usuário atualizado com sucesso' });
     })
     .catch(error => {
-      return res.status(500).json({ msg: 'Erro interno no banco de dados', details: error.message });
+      console.error(error);
+      return res.status(500).json({ message: 'Erro ao atualizar o usuário', details: error.message });
     });
 };
 
-
 exports.deleteUser = (req, res) => {
-  const {id} = req.params;
-  User.destroy({where: {id: id}}).then(() => {
-    res.status(200).json({message: 'Usuário apagado com sucesso'})
-  })
+  const { id } = req.params;
 
-  .catch(error => {
-    res.status(500).json({errors: 'Erro no servidor'})
-  })
-}
+  User.destroy({ where: { id } })
+    .then(result => {
+      if (result === 0) {
+        return res.status(404).json({ message: 'Usuário não encontrado' });
+      }
+      return res.status(200).json({ message: 'Usuário apagado com sucesso' });
+    })
+    .catch(error => {
+      console.error(error);
+      return res.status(500).json({ message: 'Erro ao apagar usuário', details: error.message });
+    });
+};

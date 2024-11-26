@@ -22,8 +22,8 @@ auth.post('/login', async (req, res) => {
     }
 
     const payload = { id: user.id };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || '*reey%ew65E$w7ee9agts6)(8e636a5', 
-      { expiresIn: '6h' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'xH%9z@Tp+7$3Yp%QtN1z&u6w#bFdH!8WkA4eVZk+LmM1', 
+      { expiresIn: '4d' });
 
     return res.json({ message: 'Autenticado com sucesso', token });
   } catch (error) {

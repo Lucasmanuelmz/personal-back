@@ -109,7 +109,7 @@ exports.getArticleBySlug = (req, res) => {
 
 exports.createArticle = [articleValidate, (req, res) => {
 
-  const {title, description, article, categoryId} = req.body;
+  const {title, description, article, categoryId, authorId} = req.body;
   const url = req.file? `${baseUrl}/uploads/${req.file.filename}`: null;
 
   const errors = validationResult(req);
@@ -133,6 +133,7 @@ exports.createArticle = [articleValidate, (req, res) => {
     description: description,
     categoryId: categoryId,
     url: url,
+    authorId,
     article: article 
   })
   .then(() => {

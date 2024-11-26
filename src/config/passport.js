@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET || '*reey%ew65E$w7ee9agts6)(8e636a5',
+  secretOrKey: process.env.JWT_SECRET || 'xH%9z@Tp+7$3Yp%QtN1z&u6w#bFdH!8WkA4eVZk+LmM1',
 }
 
 passport.use(
