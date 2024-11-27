@@ -12,7 +12,6 @@ require('./config/passport');
 const protectErrorsLog = require('./middlewares/privateError')
 const helmet = require('helmet');
 const compression = require('compression');
-const currentUser = require('./middlewares/currentUser');
 const passwordRouter = require('./passwordRouter/index');
 const protectRouter = require('./middlewares/protectRoutes');
 
