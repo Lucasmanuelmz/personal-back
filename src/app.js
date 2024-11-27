@@ -14,6 +14,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const currentUser = require('./middlewares/currentUser');
 const passwordRouter = require('./passwordRouter/index');
+const protectRouter = require('./middlewares/protectRoutes');
 
 app.use(compression());
 app.use(helmet());
@@ -191,7 +192,7 @@ app.use('/', articleRouter);
 app.use('/', categoryRouter);
 app.use('/', userRouter);
 app.use('/', auth);
-app.get('/profile', currentUser, (req, res) => {
+app.get('/profile', protectRouter, (req, res) => {
   const user = {
     id: req.user.id,
     firstname: req.user.firstname,
