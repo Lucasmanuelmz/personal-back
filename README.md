@@ -1,6 +1,6 @@
 # Personal-Back
 
-Aplicativo backend em Express.js para gerenciar artigos, categorias e usuários.
+API em Express.js para gerenciar artigos, categorias e usuários.
 
 Comecei a adicionar testes no aplicativo um pouco tarde, depois de já ter implementado quase todas as rotas. Isso acabou tornando o processo mais demorado do que o esperado. Por esse motivo, interrompi os testes de integração após concluir o módulo userRouter. No entanto, o aplicativo foi cuidadosamente testado com o Postman para garantir a funcionalidade.
 
@@ -10,7 +10,7 @@ Gostaria de ter seguido o método de desenvolvimento orientado por testes (TDD),
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seuusuario/personal-back.git
+   git clone https://github.com/Lucasmanuelmz/personal-back.git
    cd personal-back
 
 # Encontrou algum erro? Contacte me suportedevlucas@devlucas.icu

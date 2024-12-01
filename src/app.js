@@ -106,31 +106,31 @@ app.get('/', (req, res) => {
         description: 'Obtém todos os usuários',
         method: 'GET',
         endpoint: '/users',
-        example: 'curl -X GET https://api.devlucas.icu/users'
+        example: 'curl -X GET https://api.devlucas.icu/api/users'
       },
       post: {
         description: 'Cria um novo usuário',
         method: 'POST',
         endpoint: '/users',
-        example: 'curl -X POST https://api.devlucas.icu/users -H "Content-Type: application/json" -d \'{"firstname": "novousuario", "email": "email@exemplo.com"}\''
+        example: 'curl -X POST https://api.devlucas.icu/api/users -H "Content-Type: application/json" -d \'{"firstname": "novousuario", "email": "email@exemplo.com"}\''
       },
       getId: {
         description: 'Obtém um usuário pelo ID',
         method: 'GET',
         endpoint: '/users/:id',
-        example: 'curl -X GET https://api.devlucas.icu/users/1'
+        example: 'curl -X GET https://api.devlucas.icu/api/users/1'
       },
       put: {
         description: 'Atualiza um usuário',
         method: 'PUT',
         endpoint: '/users/:id',
-        example: 'curl -X PUT https://api.devlucas.icu/users/1 -H "Content-Type: application/json" -d \'{"firstname": "usuarioatualizado"}\''
+        example: 'curl -X PUT https://api.devlucas.icu/api/users/1 -H "Content-Type: application/json" -d \'{"firstname": "usuarioatualizado"}\''
       },
       delete: {
         description: 'Apaga um usuário',
         method: 'DELETE',
         endpoint: '/users/:id',
-        example: 'curl -X DELETE https://api.devlucas.icu/users/1'
+        example: 'curl -X DELETE https://api.devlucas.icu/api/users/1'
       }
     },
     authors: {
@@ -189,7 +189,7 @@ app.get('/', (req, res) => {
 });
 app.use('/', articleRouter);
 app.use('/', categoryRouter);
-app.use('/', userRouter);
+app.use('/api', userRouter);
 app.use('/', auth);
 app.get('/profile', protectRouter, (req, res) => {
   const user = {

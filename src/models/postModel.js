@@ -35,6 +35,6 @@ Category.hasMany(Article);
 Article.belongsTo(Author);
 Author.hasMany(Article)
 
-Article.sync({alter: true})
+Article.sync({alter: true});
 
 module.exports = Article;

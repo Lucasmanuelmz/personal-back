@@ -1,6 +1,5 @@
 const {sequelize, DataTypes} = require('../database/database');
 const User = require('./userModel');
-const Article = require('./postModel');
 
 const Author = sequelize.define('author', {
   firstname: {
